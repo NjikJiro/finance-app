@@ -1,6 +1,6 @@
 <div class="sidebar d-flex flex-column" id="sidebar">
     <div class="brand p-4 text-center border-bottom">
-        <h4 class="fw-bold mb-0 text-primary">FinanceApp</h4>
+        <h4 class="fw-bold mb-0 " style="color: #5f60ff">FinanceApp</h4>
     </div>
 
     <div class="mt-3 flex-grow-1 px-3">

@@ -215,7 +215,7 @@
         const canvas = document.getElementById(canvasId);
         const legend = document.getElementById(legendId);
         if (!canvas || !dataArray.length) {
-            legend.innerHTML = "<small class='text-muted'>No data</small>";
+            legend.innerHTML = "<small class='text-muted'>Belum ada data</small>";
             return;
         }
 
