@@ -32,7 +32,7 @@ class Auth extends CI_Controller
 
             $data = [
                 'user_id' => $user->id,
-                'user_name' => $user->name,
+                'user_name' => $user->nama,
                 'logged_in' => true
             ];
 
