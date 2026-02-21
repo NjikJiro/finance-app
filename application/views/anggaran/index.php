@@ -24,11 +24,15 @@
             if ($persentase >= 100) $warna_bar = "bg-danger";
         ?>
             <div class="col-md-6 col-xl-4 mb-4">
-                <div class="card border-0 shadow-sm rounded-4">
+                <div class="card border-0 shadow-sm rounded-4 position-relative">
+                    <a href="<?= base_url('anggaran/hapus/' . $a->id) ?>" class="btn-delete-anggaran text-muted" onclick="return confirm('Apakah Anda yakin ingin menghapus anggaran kategori <?= $a->nama_kategori ?>?')" style="position: absolute; top: 15px; right: 15px; z-index: 10;">
+                        <i class="bi bi-trash3 small"></i>
+                    </a>
+
                     <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div class="d-flex justify-content-between align-items-start mb-2 pe-3">
                             <h6 class="fw-bold text-dark mb-0"><?= htmlspecialchars($a->nama_kategori) ?></h6>
-                            <span class="badge <?= $warna_bar ?> rounded-pill"><?= number_format($persentase, 0) ?>%</span>
+                            <span class="badge <?= $warna_bar ?> rounded-pill" style="font-size: 10px;"><?= number_format($persentase, 0) ?>%</span>
                         </div>
 
                         <div class="progress rounded-pill mb-3" style="height: 12px; background-color: #f0f0f0;">
@@ -45,16 +49,6 @@
                                 <span class="fw-bold text-primary">Rp <?= number_format($a->nominal_target, 0, ',', '.') ?></span>
                             </div>
                         </div>
-
-                        <?php if ($persentase >= 100) : ?>
-                            <div class="mt-3 p-2 bg-danger bg-opacity-10 text-white rounded-3 small text-center fw-bold">
-                                <i class="bi bi-exclamation-octagon-fill me-1"></i> Wah, sudah lewat batas!
-                            </div>
-                        <?php elseif ($persentase >= 80) : ?>
-                            <div class="mt-3 p-2 bg-warning bg-opacity-10 text-dark rounded-3 small text-center fw-bold">
-                                <i class="bi bi-exclamation-triangle-fill me-1"></i> Hati-hati, hampir penuh!
-                            </div>
-                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -108,3 +102,16 @@
         </div>
     </div>
 </div>
+
+<style>
+    .btn-delete-anggaran {
+        opacity: 0.3;
+        transition: all 0.2s ease;
+    }
+
+    .card:hover .btn-delete-anggaran {
+        opacity: 1;
+        color: #ef4444 !important;
+        /* Berubah jadi merah saat card di-hover */
+    }
+</style>

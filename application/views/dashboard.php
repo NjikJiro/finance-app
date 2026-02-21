@@ -33,8 +33,8 @@
                     <div>
                         <small class="text-muted d-block">Saldo Tunai (Cash)</small>
                         <h5 class="fw-bold mb-0 text-dark">
-                            <span class="amount" data-original="Rp <?= number_format($saldo_atm, 0, ',', '.') ?>">
-                                Rp <?= number_format($saldo_atm, 0, ',', '.') ?>
+                            <span class="amount" data-original="Rp <?= number_format($saldo_tunai, 0, ',', '.') ?>">
+                                Rp <?= number_format($saldo_tunai, 0, ',', '.') ?>
                             </span>
                         </h5>
                     </div>
@@ -134,7 +134,7 @@
     </div>
 
     <div class="row g-4 mb-4">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="card border-0 shadow-sm p-4 h-100 rounded-4 bg-white">
                 <h6 class="fw-bold mb-4">Distribusi Pemasukan</h6>
                 <div class="d-flex align-items-center gap-4">
@@ -143,7 +143,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="card border-0 shadow-sm p-4 h-100 rounded-4 bg-white">
                 <h6 class="fw-bold mb-4">Distribusi Pengeluaran</h6>
                 <div class="d-flex align-items-center gap-4">
@@ -152,11 +152,7 @@
                 </div>
             </div>
         </div>
-    </div>
-
-
-    <div class="row flex-row-reverse">
-        <div class="col-md-5 mb-4">
+        <div class="col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -197,12 +193,23 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-md-7 mb-4">
+
+    <div class="row flex-row g-4">
+        <div class="col-lg-6">
             <div class="card border-0 shadow-sm p-4 rounded-4 bg-white h-100 d-flex flex-column">
                 <h6 class="fw-bold mb-4">Tren Keuangan 6 Bulan Terakhir</h6>
                 <div class="flex-grow-1" style="min-height: 250px; position: relative; width: 100%;">
                     <canvas id="barChart6Bulan"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm p-4 rounded-4 bg-white h-100 d-flex flex-column">
+                <h6 class="fw-bold mb-4">Perkembangan Saldo 6 Bulan Terakhir</h6>
+                <div class="flex-grow-1" style="min-height: 250px; position: relative; width: 100%;">
+                    <canvas id="lineChartSaldo"></canvas>
                 </div>
             </div>
         </div>
@@ -270,14 +277,18 @@
                     datasets: [{
                             label: 'Pendapatan',
                             data: rawData.map(i => i.pendapatan),
-                            backgroundColor: '#10b981', // Matching warna success kamu
+                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                            borderColor: '#10b981',
+                            borderWidth: 2,
                             borderRadius: 6,
                             barPercentage: 0.6
                         },
                         {
                             label: 'Pengeluaran',
                             data: rawData.map(i => i.pengeluaran),
-                            backgroundColor: '#ef4444', // Matching warna danger kamu
+                            backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                            borderColor: '#ef4444',
+                            borderWidth: 2,
                             borderRadius: 6,
                             barPercentage: 0.6
                         }
@@ -290,7 +301,10 @@
                         y: {
                             beginAtZero: true,
                             grid: {
-                                display: false
+                                display: true, // AKTIFKAN INI
+                                color: 'rgba(0, 0, 0, 0.07)', // Warna garis tipis (soft grey)
+                                drawBorder: false, // Menghilangkan garis tepi kiri yang kaku
+                                borderDash: [5, 5]
                             },
                             ticks: {
                                 font: {
@@ -320,6 +334,77 @@
                                 font: {
                                     size: 11,
                                     family: 'Poppins'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // === RENDER LINE CHART PERKEMBANGAN SALDO ===
+        const lineCanvas = document.getElementById('lineChartSaldo');
+        if (lineCanvas) {
+            const rawData = <?= json_encode($bulanan_6 ?? []) ?>;
+
+            // Logika menghitung saldo kumulatif (perkembangan)
+            let saldoAkumulatif = 0;
+            const dataSaldo = rawData.map(i => {
+                saldoAkumulatif += (parseFloat(i.pendapatan) - parseFloat(i.pengeluaran));
+                return saldoAkumulatif;
+            });
+
+            new Chart(lineCanvas.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: rawData.map(i => i.periode),
+                    datasets: [{
+                        label: 'Total Saldo',
+                        data: dataSaldo,
+                        borderColor: '#5f60ff', // Warna primary kamu
+                        backgroundColor: 'rgba(95, 96, 255, 0.1)',
+                        fill: true,
+                        tension: 0.4, // Membuat garis melengkung (smooth)
+                        pointRadius: 4,
+                        pointBackgroundColor: '#5f60ff',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false, // Biarkan menyesuaikan dengan saldo
+                            grid: {
+                                color: 'rgba(0,0,0,0.07)'
+                            },
+                            ticks: {
+                                font: {
+                                    size: 10
+                                },
+                                callback: v => 'Rp ' + v.toLocaleString('id-ID')
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }, // Legend disembunyikan agar lebih clean
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' Saldo: Rp ' + context.parsed.y.toLocaleString('id-ID');
                                 }
                             }
                         }

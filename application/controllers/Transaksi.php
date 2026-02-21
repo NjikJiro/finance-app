@@ -54,13 +54,16 @@ class Transaksi extends CI_Controller
 
         $kategori = $this->db->get_where('kategori', ['id' => $kategori_id, 'user_id' => $user_id])->row();
 
+        $jumlah_raw = $this->input->post('jumlah');
+        $jumlah_clean = str_replace('.', '', $jumlah_raw); // Hapus titik jika ada
+
         if ($kategori) {
             $data = [
                 'user_id'     => $user_id,
                 'kategori_id' => $kategori_id,
                 'tipe'        => $kategori->tipe,
                 'sumber'      => $this->input->post('sumber'),
-                'jumlah'      => $this->input->post('jumlah'),
+                'jumlah'      => $jumlah_clean,
                 'tanggal'     => $this->input->post('tanggal'),
                 'keterangan'  => $this->input->post('keterangan')
             ];

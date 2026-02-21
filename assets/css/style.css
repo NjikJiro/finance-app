@@ -1,7 +1,7 @@
 /* === WARNA CUSTOM KAMU (FIXED) === */
         :root {
             --primary-gradient: linear-gradient(90deg, #5f60ff, #7b68ee);
-            --success-gradient: linear-gradient(90deg, #34d399, #10b981);
+            --success-gradient: linear-gradient(90deg, #5fc49f, #10b981);
             --danger-gradient: linear-gradient(90deg, #ef4444, #c026d3);
             --primary-solid: #5f60ff;
         }

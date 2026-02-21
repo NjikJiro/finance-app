@@ -1,7 +1,7 @@
 <?php
 class Anggaran extends CI_Controller
 {
-     public function __construct()
+    public function __construct()
     {
         parent::__construct();
         $this->load->library(['session', 'form_validation']);
@@ -10,7 +10,7 @@ class Anggaran extends CI_Controller
             redirect('auth');
         }
     }
-    
+
     public function index()
     {
         $user_id = $this->session->userdata('user_id');
@@ -104,11 +104,16 @@ class Anggaran extends CI_Controller
     {
         $user_id = $this->session->userdata('user_id');
 
-        // Pastikan anggaran yang dihapus adalah milik user yang sedang login
+        // Menghapus data dengan pengamanan ID dan User ID
         $this->db->where(['id' => $id, 'user_id' => $user_id]);
-        $this->db->delete('anggaran');
+        $delete = $this->db->delete('anggaran');
 
-        $this->session->set_flashdata('success', 'Anggaran berhasil dihapus.');
+        if ($delete) {
+            $this->session->set_flashdata('success', 'Anggaran berhasil dihapus.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus anggaran.');
+        }
+
         redirect('anggaran');
     }
 }

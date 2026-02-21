@@ -135,7 +135,7 @@
 
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">Jumlah (Rp)</label>
-                        <input type="number" name="jumlah" class="form-control form-control-lg rounded-3 fs-6" placeholder="0" min="1" required>
+                        <input type="text" name="jumlah" id="inputJumlah" class="form-control form-control-lg rounded-3 fs-6" placeholder="0" required>
                     </div>
 
                     <div class="row">
@@ -239,6 +239,39 @@
                 tipeInput.val('-').removeClass('text-danger text-success');
             }
         });
+    });
+</script>
+
+<script>
+    const inputJumlah = document.getElementById('inputJumlah');
+
+    inputJumlah.addEventListener('keyup', function(e) {
+        // Ambil nilai input, hapus semua karakter selain angka
+        let cursorArray = this.value.split("");
+        let cleanValue = this.value.replace(/[^0-9]/g, '');
+        
+        // Format menjadi ribuan dengan titik
+        this.value = formatRupiah(cleanValue);
+    });
+
+    /* Fungsi formatRupiah */
+    function formatRupiah(angka) {
+        let number_string = angka.toString(),
+            sisa = number_string.length % 3,
+            rupiah = number_string.substr(0, sisa),
+            ribuan = number_string.substr(sisa).match(/\d{3}/gi);
+
+        if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+
+        return rupiah;
+    }
+
+    // Pastikan saat form dikirim, titik dihapus agar PHP menerima angka murni
+    document.querySelector('form').addEventListener('submit', function() {
+        inputJumlah.value = inputJumlah.value.replace(/\./g, '');
     });
 </script>
 
