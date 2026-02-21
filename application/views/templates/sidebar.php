@@ -1,6 +1,6 @@
 <div class="sidebar d-flex flex-column" id="sidebar">
     <div class="brand p-4 text-center border-bottom">
-        <h4 class="fw-bold mb-0 " style="color: #5f60ff">FinanceApp</h4>
+        <h4 class="fw-bold mb-0" style="color: #5f60ff">FinanceApp</h4>
     </div>
 
     <div class="mt-3 flex-grow-1 px-3">
@@ -13,13 +13,20 @@
         <a class="nav-link mb-2 py-2 px-3 rounded-3 d-flex align-items-center <?= $this->uri->segment(1) == 'kategori' ? 'active text-white' : 'text-dark' ?>" href="<?= base_url('kategori') ?>">
             <i class="bi bi-tags me-3"></i> Kategori
         </a>
-         <a class="nav-link mb-2 py-2 px-3 rounded-3 d-flex align-items-center <?= $this->uri->segment(1) == 'anggaran' ? 'active text-white' : 'text-dark' ?>" href="<?= base_url('anggaran') ?>">
+        <a class="nav-link mb-2 py-2 px-3 rounded-3 d-flex align-items-center <?= $this->uri->segment(1) == 'anggaran' ? 'active text-white' : 'text-dark' ?>" href="<?= base_url('anggaran') ?>">
             <i class="bi bi-pie-chart me-3"></i> Anggaran
+        </a>
+
+        <div class="my-3 mx-3 border-bottom opacity-100"></div>
+        <small class="text-muted px-3 mb-2 d-block" style="font-size: 10px; letter-spacing: 1px;">Layanan</small>
+
+        <a class="nav-link mb-2 py-2 px-3 rounded-3 d-flex align-items-center <?= $this->uri->segment(1) == 'listrik' ? 'active text-white' : 'text-dark' ?>" href="<?= base_url('listrik') ?>">
+            <i class="bi bi-lightning-charge me-3"></i> Listrik
         </a>
     </div>
 
     <div class="p-3 border-top">
-        <a class="nav-link mb-2 py-2 px-3 rounded-3 d-flex align-items-center  text-danger fw-bold px-3" href="<?= base_url('auth/logout') ?>">
+        <a class="nav-link mb-2 py-2 px-3 rounded-3 d-flex align-items-center text-danger fw-bold px-3" href="<?= base_url('auth/logout') ?>">
             <i class="bi bi-box-arrow-right me-3"></i> Logout
         </a>
     </div>
