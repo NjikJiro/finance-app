@@ -63,7 +63,7 @@ class Dashboard extends CI_Controller
         $this->db->where('user_id', $user_id);
         $this->db->where('tanggal >=', date('Y-m-01', strtotime('-5 months')));
         $this->db->group_by('periode');
-        $this->db->order_by('tanggal', 'ASC');
+        $this->db->order_by('periode', 'ASC');
         $data['bulanan_6'] = $this->db->get('transaksi')->result_array();
 
         // 5. ANGGARAN
