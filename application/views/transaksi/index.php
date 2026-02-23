@@ -63,7 +63,7 @@
                                         <?php endif; ?>
                                     </td>
                                     <td>
-                                        <div class="text-muted small text-truncate" style="max-width: 150px;">
+                                        <div class="text-muted small " style="max-width: 150px;">
                                             <?= htmlspecialchars($t->keterangan ?: '-') ?>
                                         </div>
                                     </td>
@@ -135,7 +135,7 @@
 
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">Jumlah (Rp)</label>
-                        <input type="text" name="jumlah" id="inputJumlah" class="form-control form-control-lg rounded-3 fs-6" placeholder="0" required>
+                        <input type="text" name="jumlah" class="input-nominal form-control form-control-lg rounded-3 fs-6" placeholder="0" required>
                     </div>
 
                     <div class="row">
@@ -186,7 +186,7 @@
 
                     <div class="mt-3">
                         <label class="form-label small fw-bold text-muted">Jumlah Transfer (Rp)</label>
-                        <input type="number" name="jumlah" class="form-control form-control-lg rounded-3 fs-6" placeholder="0" min="1" required>
+                        <input type="text" name="jumlah" class="form-control form-control-lg rounded-3 fs-6 input-nominal" placeholder="0" min="1" required>
                     </div>
 
                     <div class="mt-3">
@@ -243,35 +243,41 @@
 </script>
 
 <script>
-    const inputJumlah = document.getElementById('inputJumlah');
+    // Gunakan class selector agar bisa menangani semua input nominal di halaman
+    const inputsNominal = document.querySelectorAll('.input-nominal');
 
-    inputJumlah.addEventListener('keyup', function(e) {
-        // Ambil nilai input, hapus semua karakter selain angka
-        let cursorArray = this.value.split("");
-        let cleanValue = this.value.replace(/[^0-9]/g, '');
-        
-        // Format menjadi ribuan dengan titik
-        this.value = formatRupiah(cleanValue);
+    inputsNominal.forEach(input => {
+        input.addEventListener('keyup', function(e) {
+            // Hapus karakter selain angka
+            let cleanValue = this.value.replace(/[^0-9]/g, '');
+            // Tampilkan dengan format titik
+            this.value = formatRupiah(cleanValue);
+        });
     });
 
     /* Fungsi formatRupiah */
     function formatRupiah(angka) {
+        if (!angka) return '';
         let number_string = angka.toString(),
             sisa = number_string.length % 3,
             rupiah = number_string.substr(0, sisa),
             ribuan = number_string.substr(sisa).match(/\d{3}/gi);
 
         if (ribuan) {
-            separator = sisa ? '.' : '';
+            let separator = sisa ? '.' : '';
             rupiah += separator + ribuan.join('.');
         }
-
         return rupiah;
     }
 
-    // Pastikan saat form dikirim, titik dihapus agar PHP menerima angka murni
-    document.querySelector('form').addEventListener('submit', function() {
-        inputJumlah.value = inputJumlah.value.replace(/\./g, '');
+    // Bersihkan titik untuk SEMUA form saat submit
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function() {
+            const nominalField = this.querySelector('.input-nominal');
+            if (nominalField) {
+                nominalField.value = nominalField.value.replace(/\./g, '');
+            }
+        });
     });
 </script>
 

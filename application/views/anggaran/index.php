@@ -86,14 +86,14 @@
                         <label class="form-label small fw-bold text-muted">Nominal Target (Rp)</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0 text-muted" style="border-radius: 12px 0 0 12px;">Rp</span>
-                            <input type="number" name="nominal_target" class="form-control form-control-lg border-start-0 shadow-none" placeholder="Contoh: 1500000" min="1" required style="border-radius: 0 12px 12px 0; font-size: 1rem;">
+                            <input type="text" name="nominal_target" class="input-nominal form-control form-control-lg border-start-0 shadow-none" placeholder="Contoh: 1500000" min="1" required style="border-radius: 0 12px 12px 0; font-size: 1rem;">
                         </div>
                     </div>
                 </div>
 
                 <div class="modal-footer border-0 p-4 pt-0">
-                    <button type="button" class="btn btn-light px-4 rounded-pill fw-bold" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success px-4 rounded-pill fw-bold shadow-sm">
+                    <button type="button" class="btn btn-outline-primary px-4 rounded-pill fw-bold" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary px-4 rounded-pill fw-bold shadow-sm">
                         Simpan Anggaran
                     </button>
                 </div>
@@ -103,6 +103,44 @@
     </div>
 </div>
 
+<script>
+    // Gunakan class selector agar bisa menangani semua input nominal di halaman
+    const inputsNominal = document.querySelectorAll('.input-nominal');
+
+    inputsNominal.forEach(input => {
+        input.addEventListener('keyup', function(e) {
+            // Hapus karakter selain angka
+            let cleanValue = this.value.replace(/[^0-9]/g, '');
+            // Tampilkan dengan format titik
+            this.value = formatRupiah(cleanValue);
+        });
+    });
+
+    /* Fungsi formatRupiah */
+    function formatRupiah(angka) {
+        if (!angka) return '';
+        let number_string = angka.toString(),
+            sisa = number_string.length % 3,
+            rupiah = number_string.substr(0, sisa),
+            ribuan = number_string.substr(sisa).match(/\d{3}/gi);
+
+        if (ribuan) {
+            let separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+        return rupiah;
+    }
+
+    // Bersihkan titik untuk SEMUA form saat submit
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function() {
+            const nominalField = this.querySelector('.input-nominal');
+            if (nominalField) {
+                nominalField.value = nominalField.value.replace(/\./g, '');
+            }
+        });
+    });
+</script>
 <style>
     .btn-delete-anggaran {
         opacity: 0.3;

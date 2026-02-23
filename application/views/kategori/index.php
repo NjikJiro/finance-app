@@ -106,6 +106,8 @@
         $('#tableKategori').DataTable({
             responsive: true,
             "order": [],
+            "pageLength": 20,
+            "lengthMenu": [20, 25, 50],
             language: {
                 search: "_INPUT_",
                 searchPlaceholder: "Cari kategori...",

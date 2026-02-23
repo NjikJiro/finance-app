@@ -15,8 +15,10 @@ class Kategori extends CI_Controller
     {
         $user_id = $this->session->userdata('user_id');
 
-        $data['kategori'] = $this->db->get_where('kategori', ['user_id' => $user_id])->result();
-
+        $this->db->order_by('tipe', 'ASC');
+        $data['kategori'] = $this->db
+            ->get_where('kategori', ['user_id' => $user_id])
+            ->result();
         $this->load->view('templates/header');
         $this->load->view('templates/sidebar');
         $this->load->view('kategori/index', $data);

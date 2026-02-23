@@ -261,3 +261,27 @@
         transition: all 0.2s ease;
     }
 </style>
+
+<style>
+    .btn-outline-primary,
+    .btn-outline-success,
+    .btn-outline-danger,
+    .btn-outline-warning {
+        background-color: transparent !important;
+        border-width: 1.5px !important;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+
+    .btn-outline-primary {
+        color: #5f60ff !important;
+        border-color: #5f60ff !important;
+    }
+
+    .btn-outline-primary:hover {
+        background-image: var(--primary-gradient) !important;
+        color: #fff !important;
+        border-color: transparent !important;
+        box-shadow: 0 4px 15px rgba(95, 96, 255, 0.3);
+    }
+</style>
