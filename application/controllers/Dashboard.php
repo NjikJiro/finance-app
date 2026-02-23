@@ -57,16 +57,28 @@ class Dashboard extends CI_Controller
         $data['pengeluaran_kategori'] = $this->get_chart_data($user_id, 'pengeluaran', $bulan, $tahun);
 
         // 4. TREND 6 BULAN
+        // 4. TREND 6 BULAN
+        $start_window = date('Y-m-01', strtotime('-5 months'));
+
+        // --- TAMBAHAN: Hitung saldo kumulatif sebelum window grafik dimulai ---
+        $this->db->select("SUM(CASE WHEN tipe = 'pendapatan' THEN jumlah ELSE 0 END) - 
+                   SUM(CASE WHEN tipe = 'pengeluaran' THEN jumlah ELSE 0 END) as saldo_awal");
+        $this->db->where('user_id', $user_id);
+        $this->db->where('tanggal <', $start_window);
+        $res_awal = $this->db->get('transaksi')->row();
+        $data['saldo_awal_grafik'] = $res_awal->saldo_awal ?? 0;
+        // ---------------------------------------------------------------------
+
         $this->db->select("DATE_FORMAT(tanggal, '%b %Y') AS periode, 
                    SUM(CASE WHEN tipe = 'pendapatan' THEN jumlah ELSE 0 END) AS pendapatan,
                    SUM(CASE WHEN tipe = 'pengeluaran' THEN jumlah ELSE 0 END) AS pengeluaran,
-                   MIN(tanggal) as urutan_tanggal"); // Tambahkan kolom bantu untuk sorting
+                   MIN(tanggal) as urutan_tanggal");
         $this->db->where('user_id', $user_id);
-        $this->db->where('tanggal >=', date('Y-m-01', strtotime('-5 months')));
+        $this->db->where('tanggal >=', $start_window); // Data yang masuk ke chart tetap 6 bulan terakhir
         $this->db->group_by('periode');
-        $this->db->order_by('urutan_tanggal', 'ASC'); // Urutkan berdasarkan tanggal asli, bukan string periode
+        $this->db->order_by('urutan_tanggal', 'ASC');
         $data['bulanan_6'] = $this->db->get('transaksi')->result_array();
-
+        
         // 5. ANGGARAN
         $this->db->select('a.*, k.nama_kategori');
         $this->db->from('anggaran a');

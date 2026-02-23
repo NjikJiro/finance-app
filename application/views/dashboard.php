@@ -236,12 +236,12 @@
                 datasets: [{
                     data: values,
                     backgroundColor: colors,
-                    borderWidth: 2,
+                    borderWidth: 0,
                     borderColor: '#fff'
                 }]
             },
             options: {
-                cutout: '0%',
+                cutout: '75%',
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
@@ -346,9 +346,10 @@
         const lineCanvas = document.getElementById('lineChartSaldo');
         if (lineCanvas) {
             const rawData = <?= json_encode($bulanan_6 ?? []) ?>;
+            const saldoAwal = <?= (float)($saldo_awal_grafik ?? 0) ?>;
 
             // Logika menghitung saldo kumulatif (perkembangan)
-            let saldoAkumulatif = 0;
+            let saldoAkumulatif = saldoAwal;
             const dataSaldo = rawData.map(i => {
                 saldoAkumulatif += (parseFloat(i.pendapatan) - parseFloat(i.pengeluaran));
                 return saldoAkumulatif;
