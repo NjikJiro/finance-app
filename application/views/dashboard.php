@@ -1,7 +1,7 @@
 <div class="container-fluid p-3 p-md-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h4 class="fw-bold mb-1"><?= $this->session->userdata('user_name') ?>Halo Renjiro</h4>
+            <h4 class="fw-bold mb-1">Halo <?= $this->session->userdata('user_name') ?></h4>
             <p class="text-muted small mb-0">Berikut adalah status keuanganmu dari semua sumber dana.</p>
         </div>
         <button class="btn btn-outline-primary shadow-sm rounded-pill px-3 py-2 " id="btn-hide-balance">

@@ -58,12 +58,13 @@ class Dashboard extends CI_Controller
 
         // 4. TREND 6 BULAN
         $this->db->select("DATE_FORMAT(tanggal, '%b %Y') AS periode, 
-                           SUM(CASE WHEN tipe = 'pendapatan' THEN jumlah ELSE 0 END) AS pendapatan,
-                           SUM(CASE WHEN tipe = 'pengeluaran' THEN jumlah ELSE 0 END) AS pengeluaran");
+                   SUM(CASE WHEN tipe = 'pendapatan' THEN jumlah ELSE 0 END) AS pendapatan,
+                   SUM(CASE WHEN tipe = 'pengeluaran' THEN jumlah ELSE 0 END) AS pengeluaran,
+                   MIN(tanggal) as urutan_tanggal"); // Tambahkan kolom bantu untuk sorting
         $this->db->where('user_id', $user_id);
         $this->db->where('tanggal >=', date('Y-m-01', strtotime('-5 months')));
         $this->db->group_by('periode');
-        $this->db->order_by('periode', 'ASC');
+        $this->db->order_by('urutan_tanggal', 'ASC'); // Urutkan berdasarkan tanggal asli, bukan string periode
         $data['bulanan_6'] = $this->db->get('transaksi')->result_array();
 
         // 5. ANGGARAN
