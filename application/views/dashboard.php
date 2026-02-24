@@ -19,8 +19,8 @@
                     <div>
                         <small class="text-muted d-block">Saldo ATM / Bank</small>
                         <h5 class="fw-bold mb-0 text-dark">
-                            <span class="amount" data-original="Rp <?= number_format($saldo_atm, 0, ',', '.') ?>">
-                                Rp <?= number_format($saldo_atm, 0, ',', '.') ?>
+                            <span class="amount" data-original="IDR <?= number_format($saldo_atm, 0, ',', '.') ?>">
+                                IDR <?= number_format($saldo_atm, 0, ',', '.') ?>
                             </span>
                         </h5>
                     </div>
@@ -33,8 +33,8 @@
                     <div>
                         <small class="text-muted d-block">Saldo Tunai (Cash)</small>
                         <h5 class="fw-bold mb-0 text-dark">
-                            <span class="amount" data-original="Rp <?= number_format($saldo_tunai, 0, ',', '.') ?>">
-                                Rp <?= number_format($saldo_tunai, 0, ',', '.') ?>
+                            <span class="amount" data-original="IDR <?= number_format($saldo_tunai, 0, ',', '.') ?>">
+                                IDR <?= number_format($saldo_tunai, 0, ',', '.') ?>
                             </span>
                         </h5>
                     </div>
@@ -47,8 +47,8 @@
                 <div class="card-body p-4 position-relative" style="z-index: 2;">
                     <small class="opacity-75 d-block mb-1 text-uppercase fw-bold" style="letter-spacing: 1px;">Kekayaan Bersih</small>
                     <h1 class="fw-bold mb-0">
-                        <span class="amount" data-original="Rp <?= number_format($saldo, 0, ',', '.') ?>">
-                            Rp <?= number_format($saldo, 0, ',', '.') ?>
+                        <span class="amount" data-original="IDR <?= number_format($saldo, 0, ',', '.') ?>">
+                            IDR <?= number_format($saldo, 0, ',', '.') ?>
                         </span>
                     </h1>
 
@@ -57,8 +57,8 @@
                             <div class="bg-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px;">
                                 <i class="bi bi-arrow-up text-success fw-bold" style="font-size: 14px;"></i>
                             </div>
-                            <span class="amount" data-original="+Rp <?= number_format($pendapatan_bulan, 0, ',', '.') ?>">
-                                +Rp <?= number_format($pendapatan_bulan, 0, ',', '.') ?>
+                            <span class="amount" data-original="+IDR <?= number_format($pendapatan_bulan, 0, ',', '.') ?>">
+                                +IDR <?= number_format($pendapatan_bulan, 0, ',', '.') ?>
                             </span>
                         </div>
 
@@ -66,8 +66,8 @@
                             <div class="bg-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px;">
                                 <i class="bi bi-arrow-down text-danger fw-bold" style="font-size: 14px;"></i>
                             </div>
-                            <span class="amount" data-original="-Rp <?= number_format($pengeluaran_bulan, 0, ',', '.') ?>">
-                                -Rp <?= number_format($pengeluaran_bulan, 0, ',', '.') ?>
+                            <span class="amount" data-original="-IDR <?= number_format($pengeluaran_bulan, 0, ',', '.') ?>">
+                                -IDR <?= number_format($pengeluaran_bulan, 0, ',', '.') ?>
                             </span>
                         </div>
                     </div>
@@ -85,8 +85,8 @@
 
                     <div class="d-flex align-items-center justify-content-center mt-2 gap-2">
                         <h3 class="fw-bold mb-0">
-                            <span class="amount" data-original="Rp <?= number_format($surplus, 0, ',', '.') ?>">
-                                Rp <?= number_format($surplus, 0, ',', '.') ?>
+                            <span class="amount" data-original="IDR <?= number_format($surplus, 0, ',', '.') ?>">
+                                IDR <?= number_format($surplus, 0, ',', '.') ?>
                             </span>
                         </h3>
 
@@ -178,7 +178,7 @@
                                     <div class="text-end">
                                         <div class="small fw-bold <?= $rt->tipe == 'pendapatan' ? 'text-success' : ($rt->tipe == 'transfer' ? 'text-primary' : 'text-danger') ?>">
                                             <?= $rt->tipe == 'pengeluaran' ? '-' : ($rt->tipe == 'pendapatan' ? '+' : '') ?>
-                                            Rp<?= number_format($rt->jumlah, 0, ',', '.') ?>
+                                            IDR <?= number_format($rt->jumlah, 0, ',', '.') ?>
                                         </div>
                                     </div>
                                 </div>
@@ -255,7 +255,7 @@
         legend.innerHTML = dataArray.map((item, i) => `
             <div class="d-flex align-items-center mb-2">
                 <div style="width:10px;height:10px;background:${colors[i % colors.length]};border-radius:50%;margin-right:10px;"></div>
-                <div class="small"><b>${item.nama_kategori}</b><br><span class="text-muted">Rp ${parseFloat(item.total).toLocaleString('id-ID')}</span></div>
+                <div class="small"><b>${item.nama_kategori}</b><br><span class="text-muted">IDR ${parseFloat(item.total).toLocaleString('id-ID')}</span></div>
             </div>
         `).join('');
     }
@@ -310,7 +310,7 @@
                                 font: {
                                     size: 10
                                 },
-                                callback: v => 'Rp ' + v.toLocaleString('id-ID')
+                                callback: v => 'IDR ' + v.toLocaleString('id-ID')
                             }
                         },
                         x: {
@@ -384,7 +384,7 @@
                                 font: {
                                     size: 10
                                 },
-                                callback: v => 'Rp ' + v.toLocaleString('id-ID')
+                                callback: v => 'IDR ' + v.toLocaleString('id-ID')
                             }
                         },
                         x: {
@@ -405,7 +405,7 @@
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    return ' Saldo: Rp ' + context.parsed.y.toLocaleString('id-ID');
+                                    return ' Saldo: IDR ' + context.parsed.y.toLocaleString('id-ID');
                                 }
                             }
                         }
@@ -424,7 +424,7 @@
         function applyBalanceStatus() {
             if (isHidden) {
                 $('.amount').each(function() {
-                    $(this).text('Rp •••••••••');
+                    $(this).text('IDR •••••••••');
                 });
                 $('#btn-hide-balance').html('<i class="bi bi-eye me-1"></i> Tampilkan Saldo');
                 $('#btn-hide-balance').removeClass('btn-outline-primary').addClass('btn-primary text-white');

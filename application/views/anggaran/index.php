@@ -42,11 +42,11 @@
                         <div class="row text-muted small">
                             <div class="col-6">
                                 <span>Terpakai:</span><br>
-                                <span class="fw-bold text-dark">Rp <?= number_format($a->total_terpakai, 0, ',', '.') ?></span>
+                                <span class="fw-bold text-dark">IDR <?= number_format($a->total_terpakai, 0, ',', '.') ?></span>
                             </div>
                             <div class="col-6 text-end">
                                 <span>Target:</span><br>
-                                <span class="fw-bold text-primary">Rp <?= number_format($a->nominal_target, 0, ',', '.') ?></span>
+                                <span class="fw-bold text-primary">IDR <?= number_format($a->nominal_target, 0, ',', '.') ?></span>
                             </div>
                         </div>
                     </div>

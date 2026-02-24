@@ -76,10 +76,10 @@
                                     </td>
                                     <td class="text-end">
                                         <?php if ($t->tipe == 'transfer') : ?>
-                                            <span class="text-primary fw-bold">Rp <?= number_format($t->jumlah, 0, ',', '.') ?></span>
+                                            <span class="text-primary fw-bold">IDR <?= number_format($t->jumlah, 0, ',', '.') ?></span>
                                         <?php else : ?>
                                             <span class="<?= $t->tipe == 'pengeluaran' ? 'text-danger' : 'text-success' ?> fw-bold">
-                                                <?= $t->tipe == 'pengeluaran' ? '-' : '+' ?> Rp <?= number_format($t->jumlah, 0, ',', '.') ?>
+                                                <?= $t->tipe == 'pengeluaran' ? '-' : '+' ?> IDR <?= number_format($t->jumlah, 0, ',', '.') ?>
                                             </span>
                                         <?php endif; ?>
                                     </td>
@@ -134,7 +134,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">Jumlah (Rp)</label>
+                        <label class="form-label small fw-bold text-muted">Jumlah (IDR)</label>
                         <input type="text" name="jumlah" class="input-nominal form-control form-control-lg rounded-3 fs-6" placeholder="0" required>
                     </div>
 
@@ -185,7 +185,7 @@
                     </div>
 
                     <div class="mt-3">
-                        <label class="form-label small fw-bold text-muted">Jumlah Transfer (Rp)</label>
+                        <label class="form-label small fw-bold text-muted">Jumlah Transfer (IDR)</label>
                         <input type="text" name="jumlah" class="form-control form-control-lg rounded-3 fs-6 input-nominal" placeholder="0" min="1" required>
                     </div>
 

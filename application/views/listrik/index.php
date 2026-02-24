@@ -66,7 +66,7 @@
     </div>
 
     <div class="row g-4 mb-4">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-4">
                     <h6 class="fw-bold mb-3"><i class="bi bi-pencil-square me-2 text-primary"></i>Catat Sisa kWh</h6>
@@ -96,7 +96,7 @@
             </div>
         </div>
 
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
                 <h6 class="fw-bold mb-1">Tren Penurunan Sisa Listrik</h6>
                 <p class="text-muted small mb-4">Memantau sisa energi harian</p>
