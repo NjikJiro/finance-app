@@ -4,6 +4,9 @@
             <h4 class="fw-bold mb-1">Pemakaian Listrik</h4>
             <p class="text-muted small mb-0">Monitor sisa token dan tren penggunaan harianmu.</p>
         </div>
+        <button class="btn btn-outline-primary shadow-sm rounded-pill px-3 py-2" id="btn-hide-balance">
+            <i class="bi bi-eye-slash me-1"></i> <span id="text-hide">Sembunyikan Saldo</span>
+        </button>
     </div>
 
     <div class="row g-4 mb-4">
@@ -11,10 +14,10 @@
             <div class="card bg-primary text-white border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="bg-opacity-20 p-2 rounded-3">
+                        <div class=" bg-opacity-20 p-2 rounded-3">
                             <i class="bi bi-lightning-charge-fill fs-4"></i>
                         </div>
-                        <span class="badge bg-opacity-20 rounded-pill">Status: Aktif</span>
+                        <span class="badge  bg-opacity-20 rounded-pill">Status: Aktif</span>
                     </div>
                     <small class="opacity-75 d-block mb-1 text-uppercase fw-bold" style="letter-spacing: 1px;">Sisa Listrik</small>
                     <h1 class="fw-bold mb-0">
@@ -30,7 +33,7 @@
             <div class="card bg-warning text-white border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="bg-opacity-20 p-2 rounded-3">
+                        <div class=" bg-opacity-20 p-2 rounded-3">
                             <i class="bi bi-speedometer2 fs-4"></i>
                         </div>
                     </div>
@@ -51,7 +54,7 @@
             <div class="card bg-success text-white border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="bg-opacity-20 p-2 rounded-3">
+                        <div class=" bg-opacity-20 p-2 rounded-3">
                             <i class="bi bi-hourglass-split fs-4"></i>
                         </div>
                     </div>
@@ -106,7 +109,7 @@
     </div>
 
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
-        <div class="card-header bg-white border-0 p-4 pb-0">
+        <div class="card-header  border-0 p-4 pb-0">
             <h6 class="fw-bold mb-0">Log Histori kWh</h6>
         </div>
         <div class="card-body p-4">
@@ -124,7 +127,7 @@
                     <tbody>
                         <?php foreach ($histori as $h) : ?>
                             <tr>
-                                <td class="small">
+                                <td class="small" data-order="<?= $h->tanggal ?>">
                                     <span class="d-block fw-bold"><?= date('d M Y', strtotime($h->tanggal)) ?></span>
                                     <span class="text-muted" style="font-size: 11px;"><?= date('H:i', strtotime($h->tanggal)) ?> WIB</span>
                                 </td>
@@ -161,33 +164,45 @@
 
 <script>
     $(document).ready(function() {
-        // --- 1. DATATABLES ---
+        // --- 1. DATATABLES (Fixed Sorting) ---
         $('#tableListrik').DataTable({
-            "order": [
-                [0, "desc"]
-            ],
+            "order": [[ 0, "desc" ]], // Kolom 0 (Tanggal) Urut Terbaru
             "pageLength": 10,
             "lengthMenu": [10, 25, 50],
             "language": {
                 "search": "Cari data:",
                 "lengthMenu": "Tampilkan _MENU_ data",
                 "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-                "paginate": {
-                    "previous": "<",
-                    "next": ">"
-                }
+                "paginate": { "previous": "<", "next": ">" }
             }
         });
 
+        // --- 2. HIDE BALANCE FUNCTION (Sync dengan Dashboard) ---
+        let isHidden = localStorage.getItem('balanceHidden') === 'true';
+        function applyBalanceStatus() {
+            if (isHidden) {
+                $('.amount').each(function() {
+                    $(this).text($(this).text().includes('kWh') ? '•••• kWh' : '••••••••');
+                });
+                $('#btn-hide-balance').html('<i class="bi bi-eye me-1"></i> Tampilkan Saldo');
+                $('#btn-hide-balance').removeClass('btn-outline-primary').addClass('btn-primary text-white');
+            } else {
+                $('.amount').each(function() { $(this).text($(this).data('original')); });
+                $('#btn-hide-balance').html('<i class="bi bi-eye-slash me-1"></i> Sembunyikan Saldo');
+                $('#btn-hide-balance').removeClass('btn-primary text-white').addClass('btn-outline-primary');
+            }
+        }
+        applyBalanceStatus();
+        $('#btn-hide-balance').on('click', function() {
+            isHidden = !isHidden;
+            localStorage.setItem('balanceHidden', isHidden);
+            applyBalanceStatus();
+        });
 
         // --- 3. LINE CHART ---
         const ctx = document.getElementById('chartSisaListrik').getContext('2d');
-        const labels = [<?php foreach ($chart_data as $c) {
-                            echo "'" . date('d/m (H:i)', strtotime($c->tanggal)) . "',";
-                        } ?>];
-        const dataSisa = [<?php foreach ($chart_data as $c) {
-                                echo $c->kwh_sisa . ",";
-                            } ?>];
+        const labels = [<?php foreach ($chart_data as $c) { echo "'" . date('d/m (H:i)', strtotime($c->tanggal)) . "',"; } ?>];
+        const dataSisa = [<?php foreach ($chart_data as $c) { echo $c->kwh_sisa . ","; } ?>];
 
         new Chart(ctx, {
             type: 'line',
@@ -208,27 +223,13 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    y: {
-                        beginAtZero: false,
-                        grid: {
-                            color: 'rgba(0,0,0,0.05)',
-                            borderDash: [5, 5]
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        }
-                    }
+                    y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.05)', borderDash: [5, 5] } },
+                    x: { grid: { display: false } }
                 },
                 plugins: {
-                    legend: {
-                        display: false
-                    },
+                    legend: { display: false },
                     tooltip: {
-                        callbacks: {
-                            label: (context) => `Sisa: ${context.parsed.y} kWh`
-                        }
+                        callbacks: { label: (context) => ` Sisa: ${context.parsed.y} kWh` }
                     }
                 }
             }
@@ -237,14 +238,12 @@
 </script>
 
 <style>
-    /* Styling DataTables agar sesuai tema FinanceApp */
     .dataTables_wrapper .dataTables_paginate .paginate_button.current {
         background: #5f60ff !important;
         color: white !important;
         border: none !important;
         border-radius: 8px !important;
     }
-
     .dataTables_filter input {
         border-radius: 20px !important;
         padding: 5px 15px !important;
@@ -252,36 +251,12 @@
         outline: none !important;
         font-size: 13px;
     }
-
-    table.dataTable thead th {
-        border-bottom: 1px solid #f0f0f0 !important;
-    }
-
-    .amount {
-        transition: all 0.2s ease;
-    }
-</style>
-
-<style>
-    .btn-outline-primary,
-    .btn-outline-success,
-    .btn-outline-danger,
-    .btn-outline-warning {
-        background-color: transparent !important;
-        border-width: 1.5px !important;
-        transition: all 0.3s ease;
-        font-weight: 600;
-    }
-
-    .btn-outline-primary {
-        color: #5f60ff !important;
-        border-color: #5f60ff !important;
-    }
-
+    table.dataTable thead th { border-bottom: 1px solid #f0f0f0 !important; }
+    .amount { transition: all 0.2s ease; }
+    .btn-outline-primary { border-width: 1.5px !important; font-weight: 600; transition: 0.3s; }
     .btn-outline-primary:hover {
-        background-image: var(--primary-gradient) !important;
+        background-color: #5f60ff !important;
         color: #fff !important;
-        border-color: transparent !important;
         box-shadow: 0 4px 15px rgba(95, 96, 255, 0.3);
     }
 </style>

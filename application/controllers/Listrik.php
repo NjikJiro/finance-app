@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Listrik extends CI_Controller
+class Listrik extends MY_Controller
 {
     public function __construct()
     {
@@ -48,7 +48,6 @@ class Listrik extends CI_Controller
         $data['estimasi_sisa_hari'] = ($data['avg_per_hari'] > 0) ? floor($latest_kwh / $data['avg_per_hari']) : 0;
 
         // 4. Data untuk Line Chart (Sisa kWh 10 input terakhir, urutkan ASC untuk grafik)
-        // Kita gunakan subquery agar yang diambil 10 terbaru tapi tampilnya urut waktu
         $subquery = "(SELECT * FROM listrik WHERE user_id = $user_id ORDER BY tanggal DESC LIMIT 10) as t";
         $this->db->select('*');
         $this->db->from($subquery);
